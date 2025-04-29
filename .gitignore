@@ -1,0 +1,52 @@
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore environment settings
+venv/
+env/
+*.env
+*.venv
+
+# Django-specific ignores
+db.sqlite3
+*.log
+media/
+staticfiles/
+local_settings.py
+secret_settings.py
+
+# Ignore compiled Jupyter notebooks (if used)
+*.ipynb_checkpoints
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore VS Code settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore MySQL database dumps
+*.sql
+
+# Ignore migrations
+**/migrations/**
+
+# Ignore dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Ignore coverage reports
+.coverage
+htmlcov/
+.coverage.*
+.pytest_cache/
+
+# Ignore Docker related files (if applicable)
+docker-compose.override.yml
