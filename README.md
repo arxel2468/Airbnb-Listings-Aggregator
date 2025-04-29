@@ -7,32 +7,42 @@ A full-stack web application that aggregates and displays Airbnb-style listings 
 - **Data Collection**
   - Web scraping of Airbnb-style listings
   - Sample data loading option
+  - Rate limiting and error handling
+  - Data validation and cleaning
 - **Backend**
   - Django REST Framework API
   - MySQL database
   - RESTful endpoints
+  - Pagination and filtering
 - **Frontend**
   - React.js with modern UI
   - Tailwind CSS for styling
   - Responsive design
+  - Error handling and loading states
 - **Search & Filter**
   - Location-based search
   - Price range filtering
   - Rating-based sorting
+  - Property type filtering
   - Advanced filtering options
 
 ## 🛠️ Tech Stack
 
 - **Backend**
-  - Django
-  - Django REST Framework
+  - Django 5.0.2
+  - Django REST Framework 3.14.0
   - MySQL
+  - django-cors-headers
 - **Frontend**
   - React.js
   - Tailwind CSS
+  - React Router
+  - Axios
 - **Data Collection**
-  - Scrapy
+  - Python 3.8+
   - Requests
+  - BeautifulSoup4
+  - Scrapy (optional)
 
 ## 📋 Prerequisites
 
@@ -65,17 +75,21 @@ A full-stack web application that aggregates and displays Airbnb-style listings 
    pip install -r requirements.txt
    ```
 
-4. Run migrations:
+4. Configure MySQL database in `config/settings.py`
+
+5. Run migrations:
    ```bash
    python manage.py migrate
    ```
 
-5. Start the development server:
+6. Start the development server:
    ```bash
    python manage.py runserver
    ```
 
 ### Data Collection Setup
+
+See [scraper/README.md](scraper/README.md) for detailed setup instructions.
 
 1. Navigate to the scraper directory:
    ```bash
@@ -93,7 +107,7 @@ A full-stack web application that aggregates and displays Airbnb-style listings 
 
 3. Install dependencies:
    ```bash
-   pip install scrapy requests
+   pip install -r requirements.txt
    ```
 
 4. Load sample data:
@@ -122,9 +136,49 @@ A full-stack web application that aggregates and displays Airbnb-style listings 
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/listings/` | GET | List all listings |
+| `/api/listings/` | GET | List all listings with pagination and filtering |
 | `/api/add_listing/` | POST | Add a new listing |
 | `/api/listings/<id>/` | GET | Get specific listing details |
+
+### Query Parameters
+
+- `search`: Text search in title, location, and description
+- `location`: Filter by exact location
+- `property_type`: Filter by property type
+- `min_price`: Minimum price per night
+- `max_price`: Maximum price per night
+- `min_rating`: Minimum rating
+- `page`: Page number for pagination
+- `page_size`: Number of items per page (default: 12, max: 100)
+
+## 📊 Data Structure
+
+### Listing Object
+
+```json
+{
+    "id": "integer",
+    "title": "string",
+    "location": "string",
+    "address": "string",
+    "price_per_night": "float",
+    "currency": "string",
+    "total_price": "float",
+    "image_urls": ["string"],
+    "ratings": "float",
+    "description": "string",
+    "num_reviews": "integer",
+    "amenities": ["string"],
+    "host_info": {
+        "name": "string",
+        "superhost": "boolean"
+    },
+    "property_type": "string",
+    "created_at": "datetime",
+    "updated_at": "datetime",
+    "is_active": "boolean"
+}
+```
 
 ## 📸 Screenshots
 
@@ -136,9 +190,11 @@ A full-stack web application that aggregates and displays Airbnb-style listings 
 
 ## ⚠️ Notes
 
-- If you encounter issues with web scraping due to Airbnb restrictions, use the sample data loader script
 - Make sure all services (MySQL, Django, React) are running before using the application
 - The application is configured to run on default ports (Django: 8000, React: 3000)
+- Use the sample data loader if you encounter issues with web scraping
+- The scraper includes rate limiting to avoid being blocked
+- All data is validated before being stored in the database
 
 ## 🤝 Contributing
 
@@ -151,12 +207,3 @@ A full-stack web application that aggregates and displays Airbnb-style listings 
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## **3. Push All Changes**
-
-```bash
-git add .
-git commit -m "Add screenshots and README for submission"
-git push origin main

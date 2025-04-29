@@ -24,18 +24,16 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold my-6 text-center">Airbnb Listings</h1>
-      <SearchBar onSearch={fetchListings} />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {listings.map(listing => (
-          <ListingCard
-            key={listing.id}
-            listing={listing}
-            onClick={() => navigate(`/listing/${listing.id}`)}
-          />
-        ))}
-      </div>
-    </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+  {listings.length ? listings.map(listing => (
+    <ListingCard
+      key={listing.id}
+      listing={listing}
+      onClick={() => navigate(`/listing/${listing.id}`)}
+    />
+  )) : (
+    <div className="col-span-full text-center text-gray-400 mt-12">No listings found.</div>
+  )}
+</div>
   );
 }
