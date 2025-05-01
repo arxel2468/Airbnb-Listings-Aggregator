@@ -1,37 +1,51 @@
 # Airbnb Listings Scraper
 
-A Python-based web scraper for collecting Airbnb-style listings data.
+A comprehensive web scraper for collecting Airbnb listings data, built with both Scrapy and Python requests.
 
 ## 🚀 Features
 
-- Web scraping of Airbnb listings
-- Sample data loading
-- Error handling and rate limiting
-- Data validation
-- Logging support
+- **Advanced Web Scraping**:
+  - Scrapy spider for efficient crawling
+  - Handling of pagination for complete data collection
+  - Extraction of detailed listing information
+  - Automatic submission to backend API
+
+- **Data Collection**:
+  - Listing title, location, and description
+  - Price information (per night, total)
+  - Ratings and number of reviews
+  - Image URLs
+  - Property type and amenities
+  - Host information
+
+- **Reliability**:
+  - Error handling and rate limiting
+  - Data validation
+  - Robust logging
 
 ## 🛠️ Tech Stack
 
 - Python 3.8+
-- Requests
-- BeautifulSoup4
-- Scrapy (optional)
+- Scrapy framework
+- Requests library
+- BeautifulSoup4 (for data parsing)
 
 ## 📋 Prerequisites
 
 - Python 3.8+
 - pip
 - Virtual environment (recommended)
+- Backend API running (Django server)
 
 ## 🚀 Installation & Setup
 
 1. Create and activate virtual environment:
    ```bash
-   python -m venv venv
+   python -m venv .venv
    # On Windows
-   venv\Scripts\activate
+   .venv\Scripts\activate
    # On Unix or MacOS
-   source venv/bin/activate
+   source .venv/bin/activate
    ```
 
 2. Install dependencies:
@@ -41,43 +55,74 @@ A Python-based web scraper for collecting Airbnb-style listings data.
 
 ## 📝 Usage
 
+### Using the Scrapy Spider
+
+1. Make sure the backend server is running at `http://localhost:8000`
+
+2. Run the spider with parameters:
+   ```bash
+   cd scraper
+   scrapy crawl airbnb -a location="New-York--NY" -a checkin="2024-05-01" -a checkout="2024-05-07" -a guests=2
+   ```
+
+   You can customize the following parameters:
+   - `location`: The location to search for listings
+   - `checkin`: Check-in date (YYYY-MM-DD)
+   - `checkout`: Check-out date (YYYY-MM-DD)
+   - `guests`: Number of guests
+
 ### Using the Sample Data Loader
 
-1. Make sure the backend server is running
-2. Run the sample data loader:
-   ```bash
-   python load_sample.py
-   ```
+If you don't want to run the scraper to collect real data, you can use the sample data loader:
 
-### Using the Scraper
+```bash
+python load_sample.py
+```
 
-1. Import the scraper in your Python code:
-   ```python
-   from scraper import AirbnbScraper
+This will load pre-defined sample listings into your database through the backend API.
 
-   scraper = AirbnbScraper()
-   ```
+### Using the Direct Scraper
 
-2. Scrape a single listing:
-   ```python
-   listing = scraper.scrape_listing("https://www.airbnb.com/rooms/example")
-   ```
+You can also use the direct scraper implementation (non-Scrapy):
 
-3. Scrape multiple listings:
-   ```python
-   urls = [
-       "https://www.airbnb.com/rooms/example1",
-       "https://www.airbnb.com/rooms/example2"
-   ]
-   listings = scraper.scrape_listings(urls)
-   ```
+```python
+from scraper import AirbnbScraper
+from datetime import date
 
-## ⚠️ Notes
+scraper = AirbnbScraper()
+params = SearchParams(
+    location="New-York--NY",
+    check_in=date(2024, 5, 1),
+    check_out=date(2024, 5, 7),
+    guests=2
+)
+listings = scraper.scrape_listings(params)
+```
 
-- The scraper includes rate limiting to avoid being blocked
-- All scraped data is validated before being returned
-- Error handling is implemented for network issues and invalid data
-- Logging is enabled by default for debugging
+## 🔄 Data Flow
+
+1. The scraper collects data from Airbnb's website
+2. It processes and formats the data
+3. Each listing is sent to the Django backend via a POST request
+4. The backend stores the data in the MySQL database
+5. The frontend can then display this data to users
+
+## ⚠️ Important Notes
+
+- This scraper is for educational purposes only
+- Respect Airbnb's robots.txt and terms of service
+- Use rate limiting to avoid being blocked
+- The scraper needs to be updated if Airbnb changes their website structure
+
+## 🤝 Project Architecture
+
+The scraper is one component of a three-part architecture:
+
+1. **Scraper**: Collects data from Airbnb (this component)
+2. **Backend**: Django REST API that stores and serves data
+3. **Frontend**: React application that displays the data to users
+
+Each component can operate independently, with the scraper feeding data to the backend, which in turn serves the frontend.
 
 ## 📊 Data Structure
 

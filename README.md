@@ -1,30 +1,26 @@
 # Airbnb Listings Aggregator
 
-A full-stack web application that aggregates and displays Airbnb-style listings with a modern tech stack.
+A full-stack web application that aggregates and displays Airbnb-style listings with a modern tech stack, featuring web scraping, data storage, and a beautiful user interface.
 
 ## 🚀 Features
 
 - **Data Collection**
-  - Web scraping of Airbnb-style listings
-  - Sample data loading option
-  - Rate limiting and error handling
-  - Data validation and cleaning
-- **Backend**
-  - Django REST Framework API
-  - MySQL database
-  - RESTful endpoints
-  - Pagination and filtering
-- **Frontend**
-  - React.js with modern UI
-  - Tailwind CSS for styling
-  - Responsive design
-  - Error handling and loading states
-- **Search & Filter**
-  - Location-based search
-  - Price range filtering
-  - Rating-based sorting
-  - Property type filtering
-  - Advanced filtering options
+  - Scrapy-based web crawler for efficient data gathering
+  - Detailed extraction of listing information
+  - Automatic submission to backend API
+  - Sample data loading option for testing
+
+- **Backend API**
+  - Django REST Framework for robust API endpoints
+  - MySQL database for reliable data storage
+  - Advanced filtering and search capabilities
+  - Pagination for handling large datasets
+
+- **Frontend Interface**
+  - React.js with pixel-perfect Airbnb UI recreation
+  - Tailwind CSS for responsive styling
+  - Interactive search and filtering
+  - Detailed listing views
 
 ## 🛠️ Tech Stack
 
@@ -33,16 +29,18 @@ A full-stack web application that aggregates and displays Airbnb-style listings 
   - Django REST Framework 3.14.0
   - MySQL
   - django-cors-headers
+
 - **Frontend**
   - React.js
   - Tailwind CSS
   - React Router
   - Axios
+
 - **Data Collection**
   - Python 3.8+
+  - Scrapy
   - Requests
   - BeautifulSoup4
-  - Scrapy (optional)
 
 ## 📋 Prerequisites
 
@@ -54,147 +52,105 @@ A full-stack web application that aggregates and displays Airbnb-style listings 
 
 ## 🚀 Installation & Setup
 
-### Backend Setup
+### Quick Start Guide
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
+1. Clone the repository
+2. Set up each component:
+   - Backend: `cd backend && pip install -r requirements.txt`
+   - Frontend: `cd frontend/airbnb-frontend && npm install`
+   - Scraper: `cd scraper && pip install -r requirements.txt`
+3. Configure the MySQL database
+4. Start the components in order:
+   - Backend: `cd backend && python manage.py runserver`
+   - Scraper: `cd scraper && python load_sample.py` (to load sample data)
+   - Frontend: `cd frontend/airbnb-frontend && npm start`
 
-2. Create and activate virtual environment:
-   ```bash
-   python -m venv venv
-   # On Windows
-   venv\Scripts\activate
-   # On Unix or MacOS
-   source venv/bin/activate
-   ```
+### Detailed Setup Instructions
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+See each component's README file for detailed setup instructions:
+- [Backend README](backend/README.md)
+- [Frontend README](frontend/airbnb-frontend/README.md)
+- [Scraper README](scraper/README.md)
 
-4. Configure MySQL database in `config/settings.py`
+## 🔄 Project Architecture
 
-5. Run migrations:
-   ```bash
-   python manage.py migrate
-   ```
+This application follows a three-tier architecture:
 
-6. Start the development server:
-   ```bash
-   python manage.py runserver
-   ```
+1. **Data Collection Layer (Scraper)**
+   - Collects listing data from Airbnb
+   - Processes and cleans the data
+   - Submits data to the backend API
 
-### Data Collection Setup
+2. **Data Management Layer (Backend)**
+   - Stores listing data in MySQL database
+   - Provides API endpoints for data retrieval
+   - Handles filtering and pagination
 
-See [scraper/README.md](scraper/README.md) for detailed setup instructions.
+3. **Presentation Layer (Frontend)**
+   - Displays listings in an Airbnb-like interface
+   - Provides search and filtering capabilities
+   - Shows detailed listing information
 
-1. Navigate to the scraper directory:
-   ```bash
-   cd scraper
-   ```
+The components communicate through well-defined interfaces:
+- Scraper → Backend: POST requests to add listings
+- Frontend → Backend: GET requests to retrieve listings
 
-2. Create and activate virtual environment:
-   ```bash
-   python -m venv venv
-   # On Windows
-   venv\Scripts\activate
-   # On Unix or MacOS
-   source venv/bin/activate
-   ```
+## 🌟 Key Features Explained
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Data Collection Process
 
-4. Load sample data:
-   ```bash
-   python load_sample.py
-   ```
+The scraper component uses Scrapy to efficiently crawl Airbnb listings:
+1. Target a specific location, date range, and guest count
+2. Extract detailed information from each listing
+3. Submit the data to the backend via POST requests
 
-### Frontend Setup
+### Backend API Capabilities
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend/airbnb-frontend
-   ```
+The Django REST Framework API provides:
+1. Comprehensive listing management
+2. Advanced filtering options
+3. Paginated responses for efficient data transfer
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+### Frontend User Experience
 
-3. Start the development server:
-   ```bash
-   npm start
-   ```
+The React frontend offers:
+1. A pixel-perfect recreation of Airbnb's UI
+2. Interactive search and filtering
+3. Responsive design for all devices
 
-## 🔌 API Endpoints
+## 📝 Usage Examples
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/listings/` | GET | List all listings with pagination and filtering |
-| `/api/add_listing/` | POST | Add a new listing |
-| `/api/listings/<id>/` | GET | Get specific listing details |
+### Scraping and Storing Data
 
-### Query Parameters
+```bash
+cd scraper
+source .venv/bin/activate
+scrapy crawl airbnb -a location="New-York--NY" -a checkin="2024-05-01" -a checkout="2024-05-07" -a guests=2
+```
 
-- `search`: Text search in title, location, and description
-- `location`: Filter by exact location
-- `property_type`: Filter by property type
-- `min_price`: Minimum price per night
-- `max_price`: Maximum price per night
-- `min_rating`: Minimum rating
-- `page`: Page number for pagination
-- `page_size`: Number of items per page (default: 12, max: 100)
+### Retrieving Filtered Listings
 
-## 📊 Data Structure
-
-### Listing Object
-
-```json
-{
-    "id": "integer",
-    "title": "string",
-    "location": "string",
-    "address": "string",
-    "price_per_night": "float",
-    "currency": "string",
-    "total_price": "float",
-    "image_urls": ["string"],
-    "ratings": "float",
-    "description": "string",
-    "num_reviews": "integer",
-    "amenities": ["string"],
-    "host_info": {
-        "name": "string",
-        "superhost": "boolean"
-    },
-    "property_type": "string",
-    "created_at": "datetime",
-    "updated_at": "datetime",
-    "is_active": "boolean"
-}
+```
+GET http://localhost:8000/api/listings/?location=New%20York&min_price=100&max_price=300&min_rating=4
 ```
 
 ## 📸 Screenshots
 
+### Home Page
+![Home Page](screenshots/Homepage.png)
+
 ### Search Results Page
-![Search Results](screenshots/search-results.png)
+![Search Results](screenshots/Search-Results.png)
 
 ### Listing Details Page
-![Listing Page](screenshots/listing-page.png)
+![Listing Page](screenshots/Individual-House-page.png)
 
 ## ⚠️ Notes
 
-- Make sure all services (MySQL, Django, React) are running before using the application
-- The application is configured to run on default ports (Django: 8000, React: 3000)
-- Use the sample data loader if you encounter issues with web scraping
-- The scraper includes rate limiting to avoid being blocked
-- All data is validated before being stored in the database
+- This project is for educational purposes only
+- Respect Airbnb's terms of service when using the scraper
+- For production deployment, configure proper security measures
+- Ensure all components are running for full functionality
 
 ## 🤝 Contributing
 

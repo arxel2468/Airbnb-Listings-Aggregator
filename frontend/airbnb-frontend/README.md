@@ -1,70 +1,111 @@
-# Getting Started with Create React App
+# Airbnb Listings Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive React application that displays Airbnb listings with search and filtering capabilities, styled to closely resemble the actual Airbnb website.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- **Modern UI**:
+  - Pixel-perfect recreation of Airbnb's interface
+  - Responsive design for all devices
+  - Clean, intuitive user experience
 
-### `npm start`
+- **Search & Filtering**:
+  - Location-based search
+  - Date-range selection (check-in/check-out)
+  - Guest count filtering
+  - Price range filtering
+  - Ratings filtering
+  - Property type categories
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Listing Display**:
+  - Grid layout for search results
+  - Detailed listing pages
+  - Image galleries
+  - Pricing and rating information
+  - Amenities and property details
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **User Experience**:
+  - Loading states and animations
+  - Error handling
+  - Responsive feedback
+  - Toast notifications
 
-### `npm test`
+## 🛠️ Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- React.js (Create React App)
+- React Router for navigation
+- Tailwind CSS for styling
+- Axios for API requests
+- React-Toastify for notifications
 
-### `npm run build`
+## 🚀 Installation & Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Install dependencies:
+   ```bash
+   cd frontend/airbnb-frontend
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Configure API endpoint (if needed):
+   - By default, the application connects to `http://localhost:8000`
+   - To change this, you can set the `REACT_APP_API_URL` environment variable
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Start the development server:
+   ```bash
+   npm start
+   ```
 
-### `npm run eject`
+4. Build for production:
+   ```bash
+   npm run build
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 📚 Project Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `src/components/`: React components
+  - `SearchBar.js`: Search functionality with filters
+  - `ListingsGrid.js`: Grid display of listings
+  - `ListingCard.js`: Individual listing card
+  - `ListingDetails.js`: Detailed view of a listing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- `src/services/`: API services
+  - `api.js`: Functions for API requests
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- `src/App.js`: Main application with routing
 
-## Learn More
+## 🔄 Integration with Backend
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This frontend application fetches data from the Django REST Framework backend. Key integration points:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Listings Data**: Fetched from `/api/listings/` with query parameters
+- **Listing Details**: Fetched from `/api/listings/<id>/`
+- **Error Handling**: Manages API failures gracefully
 
-### Code Splitting
+## 📱 Pages
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. **Home/Search Results Page**:
+   - Search bar for filtering
+   - Category filters
+   - Grid of listing cards
+   - Price toggle
 
-### Analyzing the Bundle Size
+2. **Listing Details Page**:
+   - Photo gallery
+   - Property information
+   - Pricing details
+   - Amenities
+   - Host information
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 🔧 Customization
 
-### Making a Progressive Web App
+You can customize various aspects of the UI:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Colors: Update Tailwind theme in `tailwind.config.js`
+- Layout: Modify grid settings in `ListingsGrid.js`
+- Filters: Adjust available filters in `SearchBar.js`
 
-### Advanced Configuration
+## ⚠️ Important Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Ensure the backend API is running before starting the frontend
+- For production deployment, build the app and serve it with a proper web server
+- Images are served from the API, so ensure proper CORS configuration
