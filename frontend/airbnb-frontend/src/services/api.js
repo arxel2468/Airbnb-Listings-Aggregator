@@ -12,11 +12,31 @@ const api = axios.create({
 
 export const getListings = async (filters = {}) => {
   try {
-    const response = await api.get('/api/listings/', { params: filters });
-    return response.data;
+    // Map frontend filter names to backend parameter names
+    const params = {
+      location: filters.location,
+      search: filters.search,
+      min_price: filters.minPrice,
+      max_price: filters.maxPrice,
+      min_rating: filters.minRating,
+      property_type: filters.propertyType,
+      check_in_date: filters.checkIn,
+      check_out_date: filters.checkOut,
+      num_guests: filters.guests
+    };
+    
+    // Remove undefined/empty values
+    const cleanParams = Object.entries(params)
+      .filter(([_, value]) => value !== undefined && value !== '')
+      .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+    
+    const response = await api.get('/api/listings/', { params: cleanParams });
+    
+    // Handle paginated response
+    return response.data.results || response.data;
   } catch (error) {
     if (error.response) {
-      throw new Error(error.response.data.message || 'Failed to fetch listings');
+      throw new Error(error.response.data.error || 'Failed to fetch listings');
     }
     throw new Error('Network error. Please try again later.');
   }

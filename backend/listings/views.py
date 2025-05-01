@@ -6,6 +6,7 @@ from django.db.models import Q
 from .models import Listing
 from .serializers import ListingSerializer
 import logging
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -29,10 +30,15 @@ def get_listings(request):
                 Q(description__icontains=search_query)
             )
 
-        # Exact matches
-        for field in ['location', 'property_type']:
-            if request.GET.get(field):
-                filters &= Q(**{field: request.GET.get(field)})
+        # Location search - case insensitive contains
+        location = request.GET.get('location')
+        if location:
+            filters &= Q(location__icontains=location)
+
+        # Property type
+        property_type = request.GET.get('property_type')
+        if property_type:
+            filters &= Q(property_type=property_type)
 
         # Price range
         min_price = request.GET.get('min_price')
@@ -55,6 +61,30 @@ def get_listings(request):
                 filters &= Q(ratings__gte=float(min_rating))
             except ValueError:
                 logger.warning(f"Invalid min_rating value: {min_rating}")
+        
+        # Check-in and check-out dates
+        check_in = request.GET.get('check_in_date')
+        check_out = request.GET.get('check_out_date')
+        
+        if check_in and check_out:
+            try:
+                # Parse dates
+                check_in_date = datetime.strptime(check_in, '%Y-%m-%d').date()
+                check_out_date = datetime.strptime(check_out, '%Y-%m-%d').date()
+                
+                # Filter by availability
+                filters &= Q(check_in_date__lte=check_in_date) | Q(check_in_date__isnull=True)
+                filters &= Q(check_out_date__gte=check_out_date) | Q(check_out_date__isnull=True)
+            except ValueError:
+                logger.warning(f"Invalid date format: {check_in} or {check_out}")
+        
+        # Number of guests
+        num_guests = request.GET.get('num_guests')
+        if num_guests:
+            try:
+                filters &= Q(num_guests__gte=int(num_guests)) | Q(num_guests__isnull=True)
+            except ValueError:
+                logger.warning(f"Invalid guests value: {num_guests}")
 
         # Get queryset
         listings = Listing.objects.filter(filters)
